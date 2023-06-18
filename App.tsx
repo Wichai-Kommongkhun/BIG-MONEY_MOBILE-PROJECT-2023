@@ -7,6 +7,8 @@
 
 import React, { Component } from 'react';
 import type { PropsWithChildren } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from './component/homeComponent';
 import {
   SafeAreaView,
@@ -27,9 +29,12 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-// type SectionProps = PropsWithChildren<{
-//   title: string;
-// }>;
+type SectionProps = PropsWithChildren<{
+  title: string;
+}>;
+
+
+import List from './component/listComponent';
 
 const { height, width } = Dimensions.get('window');
 
@@ -59,27 +64,32 @@ const { height, width } = Dimensions.get('window');
 
 
 // };
+const Stack = createNativeStackNavigator()
 
+function App() {
 
-class App extends Component {
+  return (
+    <View style={[styles.bgVeiw, container.container]}>
+      {/* <View style={[styles.NavView, , { justifyContent: 'center' }]}>
+      </View> */}
 
-  render() {
-    return (
-      <View style={[styles.bgVeiw, container.container]}>
-        <View style={[styles.NavView, , { justifyContent: 'center' }]}>
-        </View>
-        <Home></Home>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName='Home' screenOptions={{headerStyle: styles.NavView}}>
+          <Stack.Screen name='Home' component={Home} options={{title:'HOME', headerBackTitle: ''}} />
+          <Stack.Screen name='Receipt' component={List} options={{title:'RECEIPS'}}></Stack.Screen>
+        </Stack.Navigator>
+      </NavigationContainer>
 
-        <View style={[styles.footerView,]}>
-          <Text style={{ fontSize: 30, textAlign: 'center', padding: 2, marginTop: 3 }}>
-            IT.KMITL & COS.RU
-          </Text>
-          <Text style={{ fontSize: 18, textAlign: 'center' }}>Wichai Kommongkhun</Text>
-        </View>
+      <View style={[styles.footerView,]}>
+        <Text style={{ fontSize: 30, textAlign: 'center', padding: 2, marginTop: 3 }}>
+          IT.KMITL & COS.RU
+        </Text>
+        <Text style={{ fontSize: 18, textAlign: 'center' }}>Wichai Kommongkhun</Text>
       </View>
+    </View>
 
-    );
-  }
+  );
+
 }
 
 const container = StyleSheet.create({
@@ -96,7 +106,7 @@ const styles = StyleSheet.create({
   },
   NavView: {
     backgroundColor: '#FFAFFA',
-    height: 100,
+    // height: 100,
     // marginTop: 50
   },
   footerView: {

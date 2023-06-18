@@ -1,10 +1,9 @@
-import React from "react";
-
+import * as React from "react";
 import { Text, Button, StyleSheet, View, Dimensions } from "react-native";
 
 const { height, width } = Dimensions.get('window');
 
-export default function Home() {
+export default function Home({navigation}: {navigation: any}) {
     return (
         <View style={[container.container]}>
             <View>
@@ -13,7 +12,7 @@ export default function Home() {
                 </Text>
             </View>
             <View style={[styles.button]}>
-                <Button title="บันทึกรายการ" color={'black'}></Button>
+                <Button title="บันทึกรายการ" color={'black'} onPress={() => navigation.navigate('Receipt')}></Button>
             </View>
             <View style={[styles.button]}>
                 <Button title="รายการของวันนี้" color={'black'}  ></Button>
@@ -22,11 +21,12 @@ export default function Home() {
                 <Button title="รายการทั้งหมด" color={'black'}  ></Button>
             </View>
             <View style={[styles.button]}>
-                <Button title="ข้อมูลเกี่ยวกับแอพลิเคชั่นและช่วยเหลือ" color={'black'}  ></Button>
+                <Button title="ข้อมูลเกี่ยวกับแอพลิเคชั่นและช่วยเหลือ" color={'black'}></Button>
             </View>
         </View>
     )
-}
+};
+
 
 const container = StyleSheet.create({
     container: {
