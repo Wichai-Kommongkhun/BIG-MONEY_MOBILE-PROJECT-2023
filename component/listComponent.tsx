@@ -6,6 +6,7 @@ const { height, width } = Dimensions.get('window');
 import { NavigationContainer, getFocusedRouteNameFromRoute, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Receipt from "./receiptComponent";
+import BuyConponent from "./BuyComponent";
 
 const Stack = createNativeStackNavigator();
 
@@ -21,7 +22,7 @@ function HomeList({ navigation }: { navigation: any }) {
                 <Button title="บันทึกรายรับ" color={'black'} onPress={() => navigation.navigate('Receipt')}></Button>
             </View>
             <View style={[styles.buttonBuy]}>
-                <Button title="บันทึกรายจ่าย" color={'black'}></Button>
+                <Button title="บันทึกรายจ่าย" color={'black'} onPress={()=> navigation.navigate('Expenses')}></Button>
             </View>
             <View style={[styles.buttonBlack]}>
                 <Button title="กลับไปหน้าแรก" color={'black'} onPress={()=>{
@@ -36,8 +37,14 @@ export default function List() {
     const navigation = useNavigation()
     return (
         <Stack.Navigator  initialRouteName="HomeList">
-            <Stack.Screen name='HomeList' component={HomeList} options={{headerShown: false}}></Stack.Screen>
-            <Stack.Screen name='Receipt' component={Receipt} options={{headerShown: true, headerBackTitle: 'Back'}}></Stack.Screen>
+            <Stack.Screen name='HomeList' component={HomeList} 
+            options={{headerShown: false}}></Stack.Screen>
+            <Stack.Screen name='Receipt' component={Receipt} 
+            options={{headerShown: true, headerBackTitle: 'Back'}}></Stack.Screen>
+
+            <Stack.Screen  name='Expenses' component={BuyConponent}
+            options={{headerShown: true, headerBackTitle: 'Back'}}
+             />
         </Stack.Navigator>
     )
 };
