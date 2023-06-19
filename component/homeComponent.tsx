@@ -12,7 +12,7 @@ export default function Home({navigation}: {navigation: any}) {
                 </Text>
             </View>
             <View style={[styles.button]}>
-                <Button title="บันทึกรายการ" color={'black'} onPress={() => navigation.navigate('Receipt')}></Button>
+                <Button title="บันทึกรายการ" color={'black'} onPress={() => navigation.navigate('ListOrder')}></Button>
             </View>
             <View style={[styles.button]}>
                 <Button title="รายการของวันนี้" color={'black'}  ></Button>

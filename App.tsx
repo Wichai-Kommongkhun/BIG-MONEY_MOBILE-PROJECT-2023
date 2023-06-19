@@ -7,7 +7,7 @@
 
 import React, { Component } from 'react';
 import type { PropsWithChildren } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, Route, getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from './component/homeComponent';
 import {
@@ -32,7 +32,6 @@ import {
 type SectionProps = PropsWithChildren<{
   title: string;
 }>;
-
 
 import List from './component/listComponent';
 
@@ -64,20 +63,37 @@ const { height, width } = Dimensions.get('window');
 
 
 // };
-const Stack = createNativeStackNavigator()
+const Stack = createNativeStackNavigator();
+
+function getHeader(route: any){
+  const routeName = getFocusedRouteNameFromRoute(route) ?? 'Home';
+
+  switch (routeName){
+    case 'Home':
+      return 'Home';
+    case route:
+      return route;
+  }
+}
 
 function App() {
 
   return (
     <View style={[styles.bgVeiw, container.container]}>
-      {/* <View style={[styles.NavView, , { justifyContent: 'center' }]}>
-      </View> */}
+      <View style={[styles.NavView, , { justifyContent: 'center' }]}>
+      </View>
 
       <NavigationContainer>
-        <Stack.Navigator initialRouteName='Home' screenOptions={{headerStyle: styles.NavView}}>
-          <Stack.Screen name='Home' component={Home} options={{title:'HOME', headerBackTitle: ''}} />
-          <Stack.Screen name='Receipt' component={List} options={{title:'RECEIPS'}}></Stack.Screen>
+        <Stack.Navigator initialRouteName='Home'
+        screenOptions={{headerShown: false}}
+        >
+        <Stack.Screen name='Home' component={Home}
+        />
+
+        <Stack.Screen name='ListOrder' component={List}></Stack.Screen>
         </Stack.Navigator>
+
+
       </NavigationContainer>
 
       <View style={[styles.footerView,]}>
@@ -92,10 +108,12 @@ function App() {
 
 }
 
+
 const container = StyleSheet.create({
   container: {
     flex: 3,
     flexDirection: 'column',
+    marginTop: 0
   }
 });
 
@@ -106,7 +124,7 @@ const styles = StyleSheet.create({
   },
   NavView: {
     backgroundColor: '#FFAFFA',
-    // height: 100,
+    height: 70,
     // marginTop: 50
   },
   footerView: {
