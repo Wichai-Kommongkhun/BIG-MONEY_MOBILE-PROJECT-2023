@@ -1,17 +1,81 @@
-import React from "react";
+import React, { useEffect } from "react";
 
-import { Text, Button, StyleSheet, View, Dimensions, TextInput, SafeAreaView } from "react-native";
+import { Text, Button, StyleSheet, View, Dimensions, TextInput, SafeAreaView, Alert } from "react-native";
 
 const { height, width } = Dimensions.get('window');
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import { openDatabase } from "react-native-sqlite-storage";
+
+const db = openDatabase({
+    name: 'app'
+})
+
 const Stack = createNativeStackNavigator();
+
+async function SelectInfo(){
+    (await db).transaction(txn =>{
+        txn.executeSql(`
+            SELECT * FROM reciepts
+        `, [], (tx, res) =>{
+            console.log("RES SELECT!");
+            
+            for (let i = 0; i < res.rows.length; i++){
+                console.log(res.rows.item(i));
+            }
+        }, error =>{
+            console.log(error);
+        })
+    })
+}
 
 function From() {
     var [inputMoney, setMoney] = React.useState('');
-    var [note, setNote] = React.useState('')
+    var [note, setNote] = React.useState('');
+    var [giver, setGiver] = React.useState('');
+
+    useEffect(()=>{
+        // TestMaster();
+        SelectInfo();
+    })
+
+   async function submit(){
+        console.log("Save Reciepts");
+        console.log('TEST INPUT: ',{
+            money: inputMoney,
+            giver: giver,
+            note: note
+        });
+
+        if (note === '' || inputMoney === '' || giver === ''){
+            console.log("No data!");
+            return false;
+        }
+
+        
+        var date = new Date();
+        const money = Number(inputMoney);
+
+        (await db).transaction(async txn =>{
+         await txn.executeSql(
+                `INSERT INTO reciepts(money, note, giver, day, month, year) VALUES (?, ?, ?, ?, ?, ?)`,[
+                    money, note, giver, date.getDay(), date.getMonth(), date.getFullYear()
+                ],
+                (tx, res) => {
+                    console.log("INSERT SUCCESSFULY!");
+                    Alert.alert('บันทึกข้อมูลสำเร็จ')
+                    setMoney(''), setGiver(''), setNote('')
+                },
+                (error) =>{
+                    console.log(error);
+                    Alert.alert("Have error")
+                }
+            )
+        })
+    }
+
     return (
         <>
             <View style={[styles.header]}>
@@ -20,7 +84,14 @@ function From() {
                 </View>
             </View>
             <View style={[styles.form]}>
-                <SafeAreaView>
+                <SafeAreaView >
+                    <Text style={styles.label}>ผู้ให้เงิน:</Text>
+                    <TextInput style={[styles.moneyInput]}
+                    maxLength={100} placeholder="ใส่ชื่อผู้ให้เงิน" value={giver}
+                    onChangeText={setGiver}
+                    ></TextInput>
+                </SafeAreaView>
+                <SafeAreaView style={{marginTop: 10}}>
                     <Text style={styles.label}>จำนวนเงินทั้งหมด: <Text style={{fontSize: 15, color: '#FF01AA'}}>* หน่วยบาท</Text></Text>
                     <TextInput onChangeText={setMoney} value={inputMoney}
                         style={[styles.moneyInput]}
@@ -35,7 +106,7 @@ function From() {
                     placeholder="ตัวอักษรไม่เกิน 150 ตัว"></TextInput>
                 </SafeAreaView>
                 <View style={[styles.button]}>
-                    <Button title="บันทึก" color={'#E6E6E6'}></Button>
+                    <Button title="บันทึก" color={'#E6E6E6'} onPress={submit}></Button>
                 </View>
             </View>
         </>

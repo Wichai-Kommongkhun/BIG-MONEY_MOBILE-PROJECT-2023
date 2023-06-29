@@ -88,6 +88,38 @@ function getHeader(route: any) {
   }
 }
 
+async function SelectTest(){
+  console.log("Test Select.");
+  (await database).transaction(txn =>{
+    txn.executeSql(
+      `SELECT * FROM reciepts`,[],
+      (tx, res) =>{
+        console.log(res.rows);
+      },
+      error =>{
+        console.log(error);
+        
+      }
+    )
+  })
+};
+
+async function TestMaster() {
+  (await database).transaction(txn =>{
+      txn.executeSql(`
+          SELECT name FROM sqlite_master
+      `,[],(tx, res) =>{
+          console.log('Test master');
+          
+          console.log(res.rows);
+          
+      }, error =>{
+          console.log(error);
+          
+      })
+  })
+}
+
 function App() {
 
   const createTable = async () =>{
@@ -117,10 +149,8 @@ function App() {
           console.log(sqltnx);
           console.log(res),
           console.log("Create Table successfully");
-        
         }, error => {
           console.log("Error: " + error);
-          
         }
       )
     })
@@ -128,7 +158,10 @@ function App() {
 
   useEffect(() =>{
     createTable();
-  }, [])
+    SelectTest();
+    TestMaster()
+  }, []);
+
 
   return (
     <View style={[styles.bgVeiw, container.container]}>
