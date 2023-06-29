@@ -15,10 +15,10 @@ export default function Home({navigation}: {navigation: any}) {
                 <Button title="บันทึกรายการ" color={'black'} onPress={() => navigation.navigate('ListOrder')}></Button>
             </View>
             <View style={[styles.button]}>
-                <Button title="รายการของวันนี้" color={'black'}  ></Button>
+                <Button title="รายการของวันนี้" color={'black'} onPress={()=> navigation.navigate('Today')} ></Button>
             </View>
             <View style={[styles.button]}>
-                <Button title="รายการทั้งหมด" color={'black'}  ></Button>
+                <Button title="รายการทั้งหมด" color={'black'} onPress={()=> navigation.navigate('History')} ></Button>
             </View>
             <View style={[styles.button]}>
                 <Button title="ข้อมูลเกี่ยวกับแอพลิเคชั่นและช่วยเหลือ" color={'black'}></Button>
